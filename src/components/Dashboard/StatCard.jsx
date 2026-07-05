@@ -6,13 +6,15 @@ export default function StatCard({ title, value, icon: Icon, description, badge 
         <span className="text-sm font-medium text-slate-500 block">{title}</span>
         <div className="flex items-baseline space-x-2">
           <span className="text-3xl font-bold tracking-tight text-slate-900">{value}</span>
-          {badge && (
+          {badge &&
+           (
             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${badge.className}`}>
               {badge.text}
             </span>
-          )}
+          )
+          }
         </div>
-        {description && (
+            {description && (
           <p className="text-xs text-slate-400 font-medium">{description}</p>
         )}
       </div>
