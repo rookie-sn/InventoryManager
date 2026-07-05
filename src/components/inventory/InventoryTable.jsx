@@ -1,3 +1,58 @@
+import { useState } from 'react';
+import { Search, Plus, Minus, Trash2, Filter } from 'lucide-react';
+
+export default function InventoryTable({ items, onInflow, onOutflow, onDelete, onOpenAddForm }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const categories = ['All', ...new Set(items.map(item => item.category))];
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+  const getStatusBadge = (stock, reorderPoint) => {
+    if (stock === 0) { //status badge
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+          Out of Stock </span>);
+    } else if (stock <= reorderPoint) {
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+          Low Stock</span> );
+    } else {
+      return (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          In Stock </span>
+      );
+    }
+  };
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
+      <div className="p-5 border-b border-slate-200 bg-slate-50/50 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+        <div className="flex flex-1 flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input type="text" placeholder="Search items by name..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-1/2 pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-colors"
+            />
+          </div>
+     <div className="relative min-w-[160px]">
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full pl-10 pr-8 py-2 border border-slate-200 rounded-lg text-sm bg-white appearance-none focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}</select>
+          </div>
+        </div>
+        <button onClick={onOpenAddForm}
+          className="flex items-center justify-center space-x-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer shadow-sm shrink-0">
+          <Plus className="h-4 w-4" />
+          <span>Add New Item</span>
+        </button>
+      </div>
 <div className="overflow-x-auto">
   <table className="w-full border-collapse text-left text-sm">
     <thead>
@@ -14,11 +69,8 @@
     <tbody className="divide-y divide-slate-100 font-normal text-slate-700">
       {filteredItems.length === 0 ? (
         <tr>
-          <td colSpan="7" className="px-6 py-12 text-center text-slate-400 font-medium">
-            No items found matching the search criteria.
-          </td>
-        </tr>
-      ) : (
+          <td colSpan="7" className="px-6 py-12 text-center text-slate-400 font-medium"> No items found matching the search criteria </td>
+        </tr>) : (
         filteredItems.map((item) => (
           <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
             <td className="px-6 py-4">
@@ -61,3 +113,6 @@
     </tbody>
   </table>
 </div>
+</div>
+  );
+}
