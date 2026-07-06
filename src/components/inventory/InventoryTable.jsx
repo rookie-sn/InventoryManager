@@ -53,8 +53,8 @@ export default function InventoryTable({ items, onInflow, onOutflow, onDelete, o
           <span>Add New Item</span>
         </button>
       </div>
-<div className="overflow-x-auto">
-  <table className="w-full border-collapse text-left text-sm">
+    <div className="overflow-x-auto">
+    <table className="w-full border-collapse text-left text-sm">
     <thead>
       <tr className="border-b border-slate-200 bg-slate-50/75 text-slate-500 font-medium">
         <th className="px-6 py-4">Item Name</th>
@@ -69,7 +69,7 @@ export default function InventoryTable({ items, onInflow, onOutflow, onDelete, o
     <tbody className="divide-y divide-slate-100 font-normal text-slate-700">
       {filteredItems.length === 0 ? (
         <tr>
-          <td colSpan="7" className="px-6 py-12 text-center text-slate-400 font-medium"> No items found matching the search criteria </td>
+          <td colSpan="7" className="px-6 py-12 text-center text-slate-400 font-medium"> No items found matching the search </td>
         </tr>) : (
         filteredItems.map((item) => (
           <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
@@ -96,23 +96,49 @@ export default function InventoryTable({ items, onInflow, onOutflow, onDelete, o
                 <td className="px-6 py-4 text-right">
               {confirmDeleteId === item.id ? (
                 <div className="flex items-center justify-end space-x-2 animate-in fade-in slide-in-from-right-1 duration-150">
-                  <button className="text-xs text-rose-600 font-medium">Confirm</button>
-                  <button className="text-xs text-slate-500">Cancel</button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-end space-x-2">
-                  <button className="text-xs text-indigo-600 font-medium">Edit</button>
-                  <button className="text-xs text-slate-500">Delete</button>
-                </div>
-              )}
-            </td>
-
-          </tr>
-        ))
-      )}
-    </tbody>
-  </table>
-</div>
-</div>
+                  <button
+                          onClick={() => {
+                            onDelete(item.id);
+                            setConfirmDeleteId(null);}}
+                          className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-[11px] font-bold transition-colors cursor-pointer"
+                        >Confirm</button>
+                        <button
+                          onClick={() => setConfirmDeleteId(null)}
+                          className="px-2.5 py-1 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-md text-[11px] font-bold transition-colors cursor-pointer"
+                        >Cancel</button>
+                      </div>) : (
+                      <div className="flex items-center justify-end space-x-1.5">
+                        <button
+                          onClick={() => onInflow(item.id)}
+                          title="Add Stock (Inflow)"
+                          className="p-1.5 border border-slate-200 rounded-md hover:bg-slate-50 hover:border-slate-300 text-slate-600 hover:text-slate-900 transition-all cursor-pointer">
+                          <Plus className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => onOutflow(item.id)}
+                          disabled={item.stock === 0}
+                          title="Reduce Stock (Outflow)"
+                          className={`p-1.5 border border-slate-200 rounded-md transition-all ${item.stock === 0
+                            ? 'opacity-40 cursor-not-allowed bg-slate-50'
+                            : 'hover:bg-slate-50 hover:border-slate-300 text-slate-600 hover:text-slate-900 cursor-pointer'
+                            }`}
+                        >
+                          <Minus className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => setConfirmDeleteId(item.id)}
+                          title="Delete Item"
+                          className="p-1.5 border border-red-100 rounded-md hover:bg-red-50 text-red-500 hover:text-red-700 transition-all cursor-pointer">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    )}
+              </td>
+              </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
