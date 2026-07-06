@@ -2,6 +2,7 @@ import { useState } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import StatCard from './components/Dashboard/StatCard';
 import InventoryTable from './components/Inventory/InventoryTable';
+import AddItemForm from './components/Inventory/AddItemForm';
 
 import {
   IndianRupee, AlertTriangle, Package} from 'lucide-react';
@@ -50,14 +51,10 @@ export default function App() {
     );
     updateItemsAndLog(nextItems);
   };
-
-  // Delete Handler
   const handleDeleteItem = (id) => {
     const nextItems = items.filter(item => item.id !== id);
     updateItemsAndLog(nextItems);
   };
-
-  // Add Item Handler
   const handleAddItem = (newItemData) => {
     const newItem = {
       id: Date.now(),
