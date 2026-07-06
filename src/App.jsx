@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import MainLayout from './components/Layout/MainLayout';
 import StatCard from './components/Dashboard/StatCard';
-import InventoryTable from './components/Inventory/InventoryTable';
-import AddItemForm from './components/Inventory/AddItemForm';
+import InventoryTable from './components/inventory/InventoryTable';
+import AddItemForm from './components/inventory/AddItemForm';
 
 import {
   IndianRupee, AlertTriangle, Package} from 'lucide-react';
