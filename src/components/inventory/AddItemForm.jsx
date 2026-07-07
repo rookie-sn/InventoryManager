@@ -67,14 +67,20 @@ export default function AddItemForm({ isOpen, onClose, onAdd }) {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Initial Stock</label>
-            <input type="number" min="0" placeholder="e.g. 50" value={formData.stock} onChange={(e) => setFormData(prev => ({ ...prev, stock: e.target.value }))}
-              className={`w-full px-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors ${errors.stock ? 'border-red-300 focus:border-red-400 focus:ring-red-400'
+            <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. 50" value={formData.stock} onChange={(e) => {
+            const sanitized = e.target.value.replace(/\D/g, '');
+            setFormData(prev => ({ ...prev, stock: sanitized }));
+          }} className={`w-full px-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors ${errors.stock ? 'border-red-300 focus:border-red-400 focus:ring-red-400'
                 : 'border-slate-200 focus:border-slate-400 focus:ring-slate-400'}`} />
             {errors.stock && <span className="text-[11px] text-red-500 mt-1 block">{errors.stock}</span>}
           </div>
           <div>
             <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Reorder Point</label>
-            <input type="number" min="0" placeholder="e.g. 5" value={formData.reorderPoint} onChange={(e) => setFormData(prev => ({ ...prev, reorderPoint: e.target.value }))} className={`w-full px-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors 
+           <input 
+    type="text" inputMode="numeric" pattern="[0-9]*" placeholder="e.g. 5" value={formData.reorderPoint} onChange={(e) => {
+      const sanitized = e.target.value.replace(/\D/g, '');
+      setFormData(prev => ({ ...prev, reorderPoint: sanitized }));
+    }} className={`w-full px-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors 
             ${errors.reorderPoint ? 'border-red-300 focus:border-red-400 focus:ring-red-400' : 'border-slate-200 focus:border-slate-400 focus:ring-slate-400'}`}
             />
             {errors.reorderPoint && <span className="text-[11px] text-red-500 mt-1 block">{errors.reorderPoint}</span>}
@@ -82,9 +88,12 @@ export default function AddItemForm({ isOpen, onClose, onAdd }) {
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Unit Price (₹ INR)</label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium pointer-events-none">₹</span>
-            <input type="number" min="0.01" step="0.01" placeholder="0.00" value={formData.price} onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))} className={`w-full pl-7 pr-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors ${errors.price ? 'border-red-300 focus:border-red-400 focus:ring-red-400' : 'border-slate-200 focus:border-slate-400 focus:ring-slate-400'}`} />
+  <div className="relative">
+    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium pointer-events-none">₹</span>
+    <input type="text"  inputMode="decimal" placeholder="0.00" value={formData.price} onChange={(e) => {
+        const sanitized = e.target.value.replace(/[^\d.]/g, '').replace(/(\..*?)\..*/g, '$1');
+        setFormData(prev => ({ ...prev, price: sanitized }));
+      }} className={`w-full pl-7 pr-3 py-2 border rounded-lg text-sm bg-white focus:outline-none focus:ring-1 transition-colors ${errors.price ? 'border-red-300 focus:border-red-400 focus:ring-red-400' : 'border-slate-200 focus:border-slate-400 focus:ring-slate-400'}`} />
           </div>
           {errors.price && <span className="text-[11px] text-red-500 mt-1 block">{errors.price}</span>}
         </div>
